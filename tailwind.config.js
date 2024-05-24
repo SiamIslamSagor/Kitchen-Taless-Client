@@ -11,7 +11,7 @@ export default {
       colors: {
         "dark-green": "#2E5834",
         "light-green": "#407948",
-        "terracota-b rown": "#C57D5D",
+        "terracota-brown": "#C57D5D",
       },
     },
   },

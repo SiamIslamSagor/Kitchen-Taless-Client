@@ -1,6 +1,9 @@
+import HeroBanner from "../components/ui/HeroBanner";
+
 const Home = () => {
   return (
-    <div className="flex min-h-screen flex-col item-center justify-center border p-5 my-10">
+    <div className="my-10">
+      <HeroBanner />
       <h1 className="text-4xl text-center font-bold">Home</h1>
     </div>
   );
