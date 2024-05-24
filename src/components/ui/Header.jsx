@@ -5,18 +5,38 @@ import { Link } from "react-router-dom";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import { useState } from "react";
 import { Fade } from "react-awesome-reveal";
+import useDataContext from "../../hooks/useDataContext";
+import toast, { Toaster } from "react-hot-toast";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, googleAuth, handleSignOut } = useDataContext();
+
+  // google auth handler
+  const handleGoogleAuthSignIn = () => {
+    const toastId = toast.loading("processing...");
+
+    googleAuth()
+      .then(() => {
+        console.log("google authorized successfully");
+        // navigate("/");
+        toast.success("Sign in successfully.", { id: toastId });
+      })
+      .catch(err => {
+        console.log("something is wrong. ERR:", err);
+        toast.error("Sign in Failed.", { id: toastId });
+      });
+  };
 
   return (
     <>
+      <Toaster />
       {isMenuOpen && (
-        <div className="fixed lg:hidden text-white  top-0 min-h-screen w-full  z-[999999999999999999] flex  justify-center">
+        <div className="fixed lg:hidden text-white  top-0 min-h-screen w-full  z-[99] flex  justify-center">
           <div
-            className="mx-5 sm:mx-10 md:mx-20  border absolute right-0 top-10 sm:top-20 z-[9999999999]"
+            className="mx-5 sm:mx-10 md:mx-20  border absolute right-0 top-10 sm:top-20 z-[99]"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <MdOutlineRestaurantMenu className="text-4xl lg:hidden cursor-pointer z-[9999999999]" />
+            <MdOutlineRestaurantMenu className="text-4xl lg:hidden cursor-pointer z-[99]" />
           </div>
           <Fade duration={500} className=" bg-dark-green w-full">
             <div className="lg:hidden  mt-60">
@@ -30,13 +50,20 @@ const Header = () => {
                 <Link to={"/"}>
                   <li>Add_Recipes</li>
                 </Link>
+                <Link to={"/"}>
+                  {user ? (
+                    <li onClick={handleSignOut}>Sign out</li>
+                  ) : (
+                    <li onClick={handleGoogleAuthSignIn}>Sign in</li>
+                  )}
+                </Link>
               </ul>
             </div>
           </Fade>
         </div>
       )}
-      <nav className="z-[99999999] sticky top-0 md:top-5 flex flex-col item-center justify-center max-sm:px-2 sm:max-lg:px-5 my-5 md:my-8 lg:my-10">
-        <div className="flex items-center bg-green-100 w-full rounded-full px-5">
+      <nav className="z-[98] sticky top-0 md:top-5 flex flex-col item-center justify-center max-sm:px-2 sm:max-lg:px-5 my-5 md:my-8 lg:my-10">
+        <div className="flex items-center bg-green-100 w-full rounded-full py-2 px-5">
           {/* logo */}
           <div className="flex border-blue-800 items-center gap-1 scale-75 sm:scale-85 lg:scale-100 duration-700 w-min md:mr-10 lg:mr-20">
             <div>
@@ -85,27 +112,42 @@ const Header = () => {
               </ul>
             </div>
             <div className="flex items-center gap-2 sm:gap-5  justify-end w-full">
-              <div>
-                <p className="flex items-center gap-2 sm:gap-5">
-                  50 <FaBitcoin className="text-2xl text-yellow-400" />
-                </p>
-              </div>
-              <User
-                avatarProps={{
-                  src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-                }}
-              />
+              {user && (
+                <>
+                  <div>
+                    <p className="flex items-center gap-2 sm:gap-5">
+                      50 <FaBitcoin className="text-2xl text-yellow-400" />
+                    </p>
+                  </div>
+                  <User
+                    avatarProps={{
+                      src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                    }}
+                  />
+                </>
+              )}
               <div onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 <HiOutlineMenuAlt1 className="text-2xl lg:hidden cursor-pointer" />
               </div>
 
               <div>
-                <Button
-                  radius="none"
-                  className="max-lg:hidden h-[30px] py-2 px-6 text-xl text-white bg-dark-green  rounded-full"
-                >
-                  Sign in
-                </Button>
+                {user ? (
+                  <Button
+                    onClick={handleSignOut}
+                    radius="none"
+                    className="max-lg:hidden h-[30px] py-2 px-6 text-xl text-white bg-dark-green  rounded-full"
+                  >
+                    Sign out
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleGoogleAuthSignIn}
+                    radius="none"
+                    className="max-lg:hidden h-[30px] py-2 px-6 text-xl text-white bg-dark-green  rounded-full"
+                  >
+                    Sign in
+                  </Button>
+                )}
               </div>
             </div>
           </div>
