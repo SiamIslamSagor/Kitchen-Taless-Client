@@ -30,7 +30,7 @@ const SuccessStories = () => {
   return (
     <section>
       <SectionTitle title="Success Stories" />
-      <div className="flex items-center flex-col lg:flex-row">
+      <div className="flex justify-between items-center flex-col lg:flex-row">
         <div className="w-full  bg-blue-200">
           <img
             className="w-full"
