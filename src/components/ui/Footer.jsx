@@ -7,6 +7,10 @@ import {
   SlSocialTwitter,
 } from "react-icons/sl";
 import { FaXTwitter } from "react-icons/fa6";
+import { IoCallOutline } from "react-icons/io5";
+import { TbWorld } from "react-icons/tb";
+import { RiGithubLine } from "react-icons/ri";
+import { CiLinkedin } from "react-icons/ci";
 
 const Footer = () => {
   return (
@@ -21,27 +25,60 @@ const Footer = () => {
       </div>{" "}
       <div className="space-y-5 text-lg flex flex-col w-fit ">
         <h3 className="text-2xl font-semibold">Quick links</h3>
-        <Link to={"/"}>Home</Link>
-        <Link to={"/recipes"}>Recipes</Link>
-        <Link to={"#"}>Blog</Link>
+        <Link className="hover:underline" to={"/"}>
+          Home
+        </Link>
+        <Link className="hover:underline" to={"/recipes"}>
+          Recipes
+        </Link>
+        <Link className="hover:underline" to={"#"}>
+          Blog
+        </Link>
       </div>{" "}
       <div className="space-y-5 text-lg flex flex-col w-fit ">
-        <h3 className="text-2xl font-semibold">Quick links</h3>
-        <Link to={"#"}>Share Recipes</Link>
-        <Link to={"#"}>About Us</Link>
-        <Link to={"#"}>Contact</Link>
+        <h3 className="text-2xl font-semibold">Developer links</h3>
+        <p className="flex items-center gap-2">
+          <IoCallOutline /> +8801882477336
+        </p>
+        <Link
+          className="hover:underline flex items-center gap-2"
+          to={"https://md-siam-official.web.app/"}
+        >
+          <TbWorld className="stroke-1 cursor-pointer " />
+          Portfolio
+        </Link>
+        <Link
+          className="hover:underline flex items-center gap-2"
+          to={"https://github.com/SiamIslamSagor"}
+        >
+          {" "}
+          <RiGithubLine className="cursor-pointer" />
+          Github
+        </Link>
+        <Link
+          className="hover:underline flex items-center gap-2"
+          to={"https://www.linkedin.com/in/mdsiamofficial/"}
+        >
+          {" "}
+          <CiLinkedin className="cursor-pointer" />
+          Linkedin
+        </Link>
       </div>{" "}
       <div className="space-y-5 text-lg flex flex-col w-fit ">
         <h3 className="text-2xl font-semibold">Legal</h3>
-        <Link to={"#"}>Terms Of Use</Link>
-        <Link to={"#"}>Privacy & Cookies</Link>
+        <Link className="hover:underline" to={"#"}>
+          Terms Of Use
+        </Link>
+        <Link className="hover:underline" to={"#"}>
+          Privacy & Cookies
+        </Link>
       </div>{" "}
       <Divider className="my-4" />
       <div className="w-full flex justify-between flex-wrap gap-5">
         <h4>
           &copy; {new Date().getFullYear()} KitchenTales All Right Reserved
         </h4>
-        <div className="flex items-center gap-5 text-xl">
+        <div className="flex items-center gap-5 text-xl *:cursor-pointer">
           <SlSocialTwitter />
           <FaXTwitter />
           <SlSocialDribbble />

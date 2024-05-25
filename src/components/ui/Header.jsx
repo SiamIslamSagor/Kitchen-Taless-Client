@@ -64,7 +64,7 @@ const Header = () => {
         </div>
       )}
       <nav className="z-[98] sticky top-0 md:top-5 flex flex-col item-center justify-center max-sm:px-2 sm:max-lg:px-5 my-5 md:my-8 lg:my-10">
-        <div className="flex items-center bg-green-100 w-full rounded-full py-2 px-5">
+        <div className="flex items-center bg-green-100 w-full rounded-full py-2 px-5 lg:px-10">
           {/* logo */}
           <Logo />
           {/* routes */}
