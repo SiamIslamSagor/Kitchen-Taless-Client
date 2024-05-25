@@ -106,22 +106,24 @@ const Header = () => {
                 <Link to={"/"}>
                   <li>Recipes</li>
                 </Link>
-                <Link to={"/"}>
-                  <li>Add_Recipes</li>
-                </Link>
+                {user && (
+                  <Link to={"/"}>
+                    <li>Add_Recipes</li>
+                  </Link>
+                )}
               </ul>
             </div>
             <div className="flex items-center gap-2 sm:gap-5  justify-end w-full">
               {user && (
                 <>
                   <div>
-                    <p className="flex items-center gap-2 sm:gap-5">
+                    <p className="flex items-center gap-2 sm:gap-2 leading-none text-xl">
                       50 <FaBitcoin className="text-2xl text-yellow-400" />
                     </p>
                   </div>
                   <User
                     avatarProps={{
-                      src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                      src: user?.photoURL,
                     }}
                   />
                 </>
