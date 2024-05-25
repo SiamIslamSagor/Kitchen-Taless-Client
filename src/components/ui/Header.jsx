@@ -8,6 +8,7 @@ import { Fade } from "react-awesome-reveal";
 import useDataContext from "../../hooks/useDataContext";
 import toast, { Toaster } from "react-hot-toast";
 import Logo from "../utils/Logo";
+import CountUp from "react-countup";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, googleAuth, handleSignOut } = useDataContext();
@@ -45,19 +46,19 @@ const Header = () => {
                 <Link to={"/"}>
                   <li>Home</li>
                 </Link>
-                <Link to={"/"}>
+                <Link to={"/recipes"}>
                   <li>Recipes</li>
                 </Link>
-                <Link to={"/"}>
+                <Link to={"/add-recipes"}>
                   <li>Add_Recipes</li>
                 </Link>
-                <Link to={"/"}>
+                <span className="cursor-pointer">
                   {user ? (
                     <li onClick={handleSignOut}>Sign out</li>
                   ) : (
                     <li onClick={handleGoogleAuthSignIn}>Sign in</li>
                   )}
-                </Link>
+                </span>
               </ul>
             </div>
           </Fade>
@@ -74,11 +75,11 @@ const Header = () => {
                 <Link to={"/"}>
                   <li>Home</li>
                 </Link>
-                <Link to={"/"}>
+                <Link to={"/recipes"}>
                   <li>Recipes</li>
                 </Link>
                 {user && (
-                  <Link to={"/"}>
+                  <Link to={"/add-recipes"}>
                     <li>Add_Recipes</li>
                   </Link>
                 )}
@@ -89,7 +90,8 @@ const Header = () => {
                 <>
                   <div>
                     <p className="flex items-center gap-2 sm:gap-2 leading-none text-xl">
-                      50 <FaBitcoin className="text-2xl text-yellow-400" />
+                      <CountUp duration={2.5} end={50} />{" "}
+                      <FaBitcoin className="text-2xl text-yellow-400" />
                     </p>
                   </div>
                   <User

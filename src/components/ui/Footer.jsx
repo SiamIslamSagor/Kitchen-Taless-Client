@@ -14,7 +14,7 @@ import { CiLinkedin } from "react-icons/ci";
 
 const Footer = () => {
   return (
-    <div className="flex w-full  justify-between bg-green-100 p-5 lg:p-20 flex-wrap">
+    <div className="flex w-full  justify-between bg-green-100 p-5 lg:p-20 flex-wrap mt-20">
       <div>
         <Logo />
         <p className="text-lg max-lg:max-w-80 lg:max-w-96">
