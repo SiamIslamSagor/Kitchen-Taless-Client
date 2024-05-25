@@ -9,22 +9,38 @@ import useDataContext from "../../hooks/useDataContext";
 import toast, { Toaster } from "react-hot-toast";
 import Logo from "../utils/Logo";
 import CountUp from "react-countup";
+import { useAxiosPublic } from "../../hooks/useAxosPublic";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, googleAuth, handleSignOut } = useDataContext();
 
-  // google auth handler
-  const handleGoogleAuthSignIn = () => {
+  const axiosPublic = useAxiosPublic();
+
+  const handleGoogleLogin = () => {
     const toastId = toast.loading("processing...");
 
     googleAuth()
-      .then(() => {
-        console.log("google authorized successfully");
-        // navigate("/");
+      .then(res => {
+        const userData = {
+          displayName: res?.user?.displayName,
+          photoURL: res?.user?.photoURL,
+          email: res?.user?.email,
+          coin: 50,
+        };
+
+        axiosPublic
+          .post("/users", userData)
+          .then(res => {
+            console.log(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+            toast.error("Failed to login.", { id: toastId });
+          });
+
         toast.success("Sign in successfully.", { id: toastId });
       })
-      .catch(err => {
-        console.log("something is wrong. ERR:", err);
+      .catch(() => {
         toast.error("Sign in Failed.", { id: toastId });
       });
   };
@@ -56,7 +72,7 @@ const Header = () => {
                   {user ? (
                     <li onClick={handleSignOut}>Sign out</li>
                   ) : (
-                    <li onClick={handleGoogleAuthSignIn}>Sign in</li>
+                    <li onClick={handleGoogleLogin}>Sign in</li>
                   )}
                 </span>
               </ul>
@@ -116,7 +132,7 @@ const Header = () => {
                   </Button>
                 ) : (
                   <Button
-                    onClick={handleGoogleAuthSignIn}
+                    onClick={handleGoogleLogin}
                     radius="none"
                     className="max-lg:hidden h-[30px] py-2 px-6 text-xl text-white bg-dark-green  rounded-full"
                   >
