@@ -60,13 +60,15 @@ const Header = () => {
             <div className="lg:hidden  mt-60">
               <ul className="text-center flex items-center flex-col gap-8 text-3xl sm:text-4xl   font-medium w-full">
                 <Link to={"/"}>
-                  <li>Home</li>
+                  <li onClick={() => setIsMenuOpen(!isMenuOpen)}>Home</li>
                 </Link>
                 <Link to={"/recipes"}>
-                  <li>Recipes</li>
+                  <li onClick={() => setIsMenuOpen(!isMenuOpen)}>Recipes</li>
                 </Link>
                 <Link to={"/add-recipes"}>
-                  <li>Add_Recipes</li>
+                  <li onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    Add_Recipes
+                  </li>
                 </Link>
                 <span className="cursor-pointer">
                   {user ? (
