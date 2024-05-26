@@ -10,7 +10,7 @@ const PrivetRoute = ({ children }) => {
   if (loading) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center ">
-        <Spinner label="Loading..." size="lg" />
+        <Spinner color="success" label="Loading..." size="lg" />
       </div>
     );
   }

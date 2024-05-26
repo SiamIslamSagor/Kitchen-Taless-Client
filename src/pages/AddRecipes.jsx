@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useAxiosPublic } from "../hooks/useAxiosPublic";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -13,6 +14,7 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const AddRecipes = () => {
   const { user } = useDataContext();
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
@@ -36,7 +38,7 @@ const AddRecipes = () => {
       purchased_by: [],
     };
     console.log(recipeInfo);
-    axiosPublic
+    axiosSecure
       .post("/add-recipe", recipeInfo)
       .then(res => {
         console.log(res);
