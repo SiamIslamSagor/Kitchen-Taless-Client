@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Recipes from "../pages/Recipes";
 import AddRecipes from "../pages/AddRecipes";
 import PrivetRoute from "../hoc/PriverRoute";
+import RecipeDetails from "../pages/RecipeDetails";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -16,6 +17,14 @@ export const router = createBrowserRouter([
       {
         path: "recipes",
         element: <Recipes />,
+      },
+      {
+        path: "recipe-details/:id",
+        element: (
+          <PrivetRoute>
+            <RecipeDetails />
+          </PrivetRoute>
+        ),
       },
       {
         path: "add-recipes",
