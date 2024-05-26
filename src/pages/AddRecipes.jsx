@@ -19,6 +19,7 @@ const AddRecipes = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const [recipeImage, setRecipeImage] = useState("");
@@ -42,6 +43,8 @@ const AddRecipes = () => {
       .post("/add-recipe", recipeInfo)
       .then(res => {
         console.log(res);
+        reset();
+        setRecipeImage("");
         toast.success("Recipe added successfully.", { id: toastId });
       })
       .catch(err => {
@@ -58,6 +61,17 @@ const AddRecipes = () => {
   return (
     <div className="flex flex-col item-center justify-center ">
       <div>
+        <div className="mx-auto w-[340px] h-[195px] sm:w-[560px] sm:h-[315px] md:w-[760px] md:h-[515px] lg:w-[920px] lg:h-[615px] xl:w-[1120px] xl:h-[695px] 2xl:w-[1236px] 2xl:h-[695px]">
+          <iframe
+            src="https://www.youtube.com/embed/ege9ZIjH5rE?si=PvavUGMbQf2yd8Da"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="size-full"
+          ></iframe>
+        </div>
+
         <SectionTitle title="Add_Recipe" />
         <form onSubmit={handleSubmit(onSubmit)} className=" space-y-5 px-10">
           <Input
