@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 import toast from "react-hot-toast";
+import { useAxiosPublic } from "../hooks/useAxiosPublic";
 
 // create a new context and export
 export const AuthContext = createContext(null);
@@ -16,6 +17,7 @@ const AuthProvider = ({ children }) => {
   // state
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxiosPublic();
 
   //   google provider
   const googleProvider = new GoogleAuthProvider();
@@ -48,15 +50,38 @@ const AuthProvider = ({ children }) => {
   //   auth observer to observe auth all time any where
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, presentUser => {
+      setUser(presentUser);
       console.log("onAuthStateChanged %%%%%):=>", presentUser);
       // set the present user in the user state and when user set complete then set loading to false
-      setUser(presentUser);
       setLoading(false);
+
+      //////////////////
+      /// jwt block ////
+      //////////////////
+
+      if (presentUser) {
+        // get token form server side and store in local storage
+        const userInfo = { email: presentUser.email };
+        axiosPublic.post("/jwt", userInfo).then(res => {
+          // if token exist, then store in local storage
+          if (res.data) {
+            localStorage.setItem("access-token", res.data.token);
+            // console.log("access-token stored");
+          }
+        });
+      }
+      // if user dose not exist, then remove stored token in local storage
+      else {
+        localStorage.removeItem("access-token");
+        console.log("access-token removed");
+        setLoading(false);
+      }
+      //////////////////////////////////
     });
     return () => {
       return unSubscribe();
     };
-  }, [user?.email]);
+  }, [user?.email, axiosPublic]);
 
   const data = {
     // state

@@ -1,22 +1,56 @@
-import { useState } from "react";
 import SectionTitle from "../components/utils/SectionTitle";
 import useDataContext from "../hooks/useDataContext";
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { Button, Input, Select, SelectItem, Spinner } from "@nextui-org/react";
+import { IoIosAddCircleOutline, IoMdCloseCircle } from "react-icons/io";
 import { useForm } from "react-hook-form";
-// import { useAxiosPublic } from "../hooks/useAxosPublic";
+import { useAxiosPublic } from "../hooks/useAxiosPublic";
+import toast from "react-hot-toast";
+import { useState } from "react";
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddRecipes = () => {
   const { user } = useDataContext();
+  const axiosPublic = useAxiosPublic();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = data => {
+  const [recipeImage, setRecipeImage] = useState("");
+  const [isImgUploading, setIsImgUploading] = useState(false);
+
+  const onSubmit = async data => {
+    const toastId = toast.loading("processing...");
+    const recipeInfo = {
+      recipe_name: data.recipe_name,
+      recipe_img: recipeImage,
+      recipe_details: data.recipe_details,
+      youtube_video_code: data.youtube_video_code,
+      country: data.country,
+      category: data.category,
+      creatorEmail: user?.email ? user?.email : "unknown",
+      watchCount: 0,
+      purchased_by: [],
+    };
+    console.log(recipeInfo);
+    axiosPublic
+      .post("/add-recipe", recipeInfo)
+      .then(res => {
+        console.log(res);
+        toast.success("Recipe added successfully.", { id: toastId });
+      })
+      .catch(err => {
+        console.log(err);
+        toast.error("Failed to add recipe.", { id: toastId });
+      });
+
+    /////////////////////////
+    toast.success("Recipe added successfully.", { id: toastId });
+
     console.log("Form submitted");
-    console.log(data);
   };
 
   return (
@@ -33,27 +67,69 @@ const AddRecipes = () => {
             label="Recipe Name"
             {...register("recipe_name", { required: true })}
           />
-          <div className="w-full min-h-40 border-dashed rounded-2xl border-2 border-dark-green bg-green-50 relative">
-            <label
-              htmlFor="recipes_img"
-              className="absolute z-10 top-1/2 left-1/2 -translate-y-[50%] -translate-x-[50%] cursor-pointer"
-            >
-              <Button
-                radius="none"
-                className="py-2 px-6 text-lg text-white bg-dark-green rounded-full"
+          {recipeImage ? (
+            <div className="flex items-center justify-center ">
+              <div className="relative my-5">
+                <img
+                  src={recipeImage}
+                  alt="recipe_image"
+                  className="min-h-60 sm:min-h-80 "
+                />
+                <IoMdCloseCircle
+                  onClick={() => setRecipeImage("")}
+                  className="absolute -top-5 sm:-top-6 text-3xl sm:text-4xl -right-5 sm:-right-6 cursor-pointer opacity-90"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="w-full min-h-40 border-dashed rounded-2xl border-2 border-dark-green bg-green-50 relative">
+              <label
+                htmlFor="recipes_img"
+                className="absolute z-10 top-1/2 left-1/2 -translate-y-[50%] -translate-x-[50%] cursor-pointer"
               >
-                <IoIosAddCircleOutline className="text-2xl" />
-                Add a photo
-              </Button>
-            </label>
-            <input
-              type="file"
-              className="cursor-pointer w-full  absolute size-full z-10 bg-blue-400 opacity-0"
-              id="recipe_img"
-              {...register("recipe_img", { required: true })}
-            />{" "}
-          </div>
-          {errors.recipe_img && (
+                {isImgUploading ? (
+                  <Spinner color="success" />
+                ) : (
+                  <Button
+                    radius="none"
+                    className="py-2 px-6 text-lg text-white bg-dark-green rounded-full"
+                  >
+                    <IoIosAddCircleOutline className="text-2xl" />
+                    Add a photo
+                  </Button>
+                )}
+              </label>
+              <input
+                type="file"
+                className="cursor-pointer w-full  absolute size-full z-10 bg-blue-400 opacity-0"
+                id="image"
+                {...register("image", {
+                  required: true,
+                  onChange: async e => {
+                    setIsImgUploading(true);
+                    const imageFile = { image: e.target.files[0] };
+                    console.log(imageFile);
+                    const res = await axiosPublic.post(
+                      image_hosting_api,
+                      imageFile,
+                      {
+                        headers: {
+                          "Content-Type": "multipart/form-data",
+                        },
+                      }
+                    );
+                    if (res.data.success) {
+                      setRecipeImage(res.data.data.display_url);
+                      console.log("image hosted on imgbb successfully.");
+                      setIsImgUploading(false);
+                    }
+                    setIsImgUploading(false);
+                  },
+                })}
+              />{" "}
+            </div>
+          )}
+          {errors.image && (
             <p className="text-xs -top-3 relative  text-red-600 pl-2">
               Please add a recipe photo
             </p>
@@ -106,7 +182,7 @@ const AddRecipes = () => {
           </Select>
           <div className="text-center pt-5 pb-10">
             <Button
-              className="text-base sm:text-xl text-white rounded-md bg-dark-green text-center"
+              className="text-base sm:text-lg text-white rounded-md bg-dark-green text-center"
               type="submit"
             >
               Submit recipes

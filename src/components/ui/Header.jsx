@@ -9,7 +9,7 @@ import useDataContext from "../../hooks/useDataContext";
 import toast, { Toaster } from "react-hot-toast";
 import Logo from "../utils/Logo";
 import CountUp from "react-countup";
-import { useAxiosPublic } from "../../hooks/useAxosPublic";
+import { useAxiosPublic } from "../../hooks/useAxiosPublic";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, googleAuth, handleSignOut } = useDataContext();
