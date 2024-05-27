@@ -3,7 +3,7 @@ import { FaBitcoin } from "react-icons/fa";
 import { HiOutlineMenuAlt1 } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Fade } from "react-awesome-reveal";
 import useDataContext from "../../hooks/useDataContext";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,6 +13,7 @@ import { useAxiosPublic } from "../../hooks/useAxiosPublic";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, googleAuth, handleSignOut } = useDataContext();
+  const [userInfo, setUserInfo] = useState({});
 
   const axiosPublic = useAxiosPublic();
 
@@ -44,6 +45,17 @@ const Header = () => {
         toast.error("Sign in Failed.", { id: toastId });
       });
   };
+
+  useEffect(() => {
+    axiosPublic
+      .get(`/user/${user?.email && user?.email}`)
+      .then(res => {
+        setUserInfo(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [axiosPublic, user?.email]);
 
   return (
     <>
@@ -108,7 +120,9 @@ const Header = () => {
                 <>
                   <div>
                     <p className="flex items-center gap-2 sm:gap-2 leading-none text-xl">
-                      <CountUp duration={2.5} end={50} />{" "}
+                      {userInfo && (
+                        <CountUp duration={2.5} end={userInfo?.coin} />
+                      )}{" "}
                       <FaBitcoin className="text-2xl text-yellow-400" />
                     </p>
                   </div>
