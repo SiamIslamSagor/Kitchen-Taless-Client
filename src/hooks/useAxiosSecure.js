@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useDataContext from "./useDataContext";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://kitchen-tales-server.vercel.app",
 });
 
 const useAxiosSecure = () => {
