@@ -2,26 +2,30 @@ import { useEffect, useState } from "react";
 import SectionTitle from "../components/utils/SectionTitle";
 import { useAxiosPublic } from "../hooks/useAxiosPublic";
 import RecipeCard from "../components/utils/RecipeCard";
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem, Spinner } from "@nextui-org/react";
 import { MdArrowOutward } from "react-icons/md";
 import { useForm } from "react-hook-form";
+import useDataContext from "../hooks/useDataContext";
 
 const Recipes = () => {
+  const { recipeLoading, setRecipeLoading } = useDataContext();
   const [recipes, setRecipes] = useState([]);
   const [reFetchRecipe, setReFetchRecipe] = useState(true);
   const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
+    setRecipeLoading(true);
     axiosPublic
-      .get(`/all-recipe`)
+      .get(`/all-recipe?limit=15`)
       .then(res => {
-        console.log(res.data.recipes);
         setRecipes(res.data.recipes);
+        setRecipeLoading(false);
       })
       .catch(err => {
         console.log(err);
+        setRecipeLoading(false);
       });
-  }, [axiosPublic, reFetchRecipe]);
+  }, [axiosPublic, reFetchRecipe, setRecipeLoading]);
 
   const { register, handleSubmit } = useForm();
 
@@ -101,15 +105,22 @@ const Recipes = () => {
               </Button>
             </div>
           </form>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6 justify-items-center">
-            {recipes?.map(recipe => (
-              <RecipeCard
-                key={recipe._id}
-                recipe={recipe}
-                setReFetchRecipe={setReFetchRecipe}
-              />
-            ))}
-          </div>
+
+          {recipeLoading ? (
+            <div className="min-h-[80vh] flex items-center justify-center ">
+              <Spinner color="success" label="Loading..." size="lg" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6 justify-items-center">
+              {recipes?.map(recipe => (
+                <RecipeCard
+                  key={recipe._id}
+                  recipe={recipe}
+                  setReFetchRecipe={setReFetchRecipe}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

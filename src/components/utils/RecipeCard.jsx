@@ -46,12 +46,26 @@ const RecipeCard = ({ recipe, setReFetchRecipe }) => {
 
   const handleRecipeDetails = recipe => {
     console.log("handleRecipeDetails clicked");
+    if (recipe.purchased_by.includes(user?.email)) {
+      console.log(recipe.purchased_by, user?.email);
+      console.log("this dish i have already booked");
+      return navigate(`/recipe-details/${recipe._id}`);
+    }
     if (user.email === recipe.creatorEmail) {
       console.log("user in the home");
-      navigate(`/recipe-details/${recipe._id}`);
+      return navigate(`/recipe-details/${recipe._id}`);
     }
     if (loggedUser.coin >= 10) {
+      console.log("user coins > 10");
       onOpen();
+      return;
+    } else {
+      console.log("user coins < 10");
+      toast.error(
+        "you don't have enough coins to view the recipe. please purchase coins."
+      );
+      navigate("/purchase-coins");
+      return;
     }
   };
 

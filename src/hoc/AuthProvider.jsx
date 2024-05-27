@@ -17,6 +17,8 @@ const AuthProvider = ({ children }) => {
   // state
   const [user, setUser] = useState(null);
   const [userInfo, setUserInfo] = useState({});
+  const [recipeLoading, setRecipeLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(true);
   const [reFetchUser, setReFetchUser] = useState(true);
 
   const [loading, setLoading] = useState(true);
@@ -51,13 +53,16 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    setUserLoading(true);
     axiosPublic
       .get(`/user/${user?.email && user?.email}`)
       .then(res => {
         setUserInfo(res.data);
+        setUserLoading(false);
       })
       .catch(err => {
         console.log(err);
+        setUserLoading(false);
       });
   }, [axiosPublic, user?.email, reFetchUser]);
 
@@ -101,8 +106,11 @@ const AuthProvider = ({ children }) => {
     // state
     user,
     userInfo,
+    userLoading,
     loading,
+    recipeLoading,
     // function
+    setRecipeLoading,
     setReFetchUser,
     googleAuth,
     logout,

@@ -5,6 +5,7 @@ import Recipes from "../pages/Recipes";
 import AddRecipes from "../pages/AddRecipes";
 import PrivetRoute from "../hoc/PriverRoute";
 import RecipeDetails from "../pages/RecipeDetails";
+import PurchaseCoins from "../pages/PurchaseCoins";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
             <AddRecipes />
           </PrivetRoute>
         ),
+      },
+      {
+        path: "purchase-coins",
+        element: <PurchaseCoins />,
       },
     ],
   },
