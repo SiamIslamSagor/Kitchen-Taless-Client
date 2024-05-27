@@ -17,14 +17,12 @@ import { useAxiosPublic } from "../../hooks/useAxiosPublic";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 /* eslint-disable react/prop-types */
-const RecipeCard = ({ recipe }) => {
-  const { user, googleAuth } = useDataContext();
+const RecipeCard = ({ recipe, setReFetchRecipe }) => {
+  const { user, googleAuth, setReFetchUser } = useDataContext();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
   const [loggedUser, setLoggedUser] = useState({});
-  const [userCoins, setUserCoins] = useState(0);
-  const [reFetchUser, setReFetchUser] = useState(true);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   // google auth handler
@@ -47,6 +45,7 @@ const RecipeCard = ({ recipe }) => {
   };
 
   const handleRecipeDetails = recipe => {
+    console.log("handleRecipeDetails clicked");
     if (user.email === recipe.creatorEmail) {
       console.log("user in the home");
       navigate(`/recipe-details/${recipe._id}`);
@@ -67,8 +66,9 @@ const RecipeCard = ({ recipe }) => {
         creatorEmail: recipe.creatorEmail,
         userEmail: loggedUser.email,
       });
+      setReFetchUser(state => !state);
+      setReFetchRecipe(state => !state);
       console.log(res.data);
-      setReFetchUser(!reFetchUser);
     }
   };
 
@@ -77,12 +77,11 @@ const RecipeCard = ({ recipe }) => {
       .get(`/user/${user?.email && user?.email}`)
       .then(res => {
         setLoggedUser(res.data);
-        setUserCoins(res.data.coin);
       })
       .catch(err => {
         console.log(err);
       });
-  }, [axiosPublic, user?.email, reFetchUser]);
+  }, [axiosPublic, user?.email]);
 
   //   console.log(userCoins);
 

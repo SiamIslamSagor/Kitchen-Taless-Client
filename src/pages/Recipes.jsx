@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
+  const [reFetchRecipe, setReFetchRecipe] = useState(true);
   const axiosPublic = useAxiosPublic();
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const Recipes = () => {
       .catch(err => {
         console.log(err);
       });
-  }, [axiosPublic]);
+  }, [axiosPublic, reFetchRecipe]);
 
   const { register, handleSubmit } = useForm();
 
@@ -102,7 +103,11 @@ const Recipes = () => {
           </form>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3  gap-6 justify-items-center">
             {recipes?.map(recipe => (
-              <RecipeCard key={recipe._id} recipe={recipe} />
+              <RecipeCard
+                key={recipe._id}
+                recipe={recipe}
+                setReFetchRecipe={setReFetchRecipe}
+              />
             ))}
           </div>
         </div>

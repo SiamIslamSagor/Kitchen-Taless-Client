@@ -12,8 +12,7 @@ import CountUp from "react-countup";
 import { useAxiosPublic } from "../../hooks/useAxiosPublic";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, googleAuth, handleSignOut } = useDataContext();
-  const [userInfo, setUserInfo] = useState({});
+  const { user, userInfo, googleAuth, handleSignOut } = useDataContext();
 
   const axiosPublic = useAxiosPublic();
 
@@ -45,17 +44,6 @@ const Header = () => {
         toast.error("Sign in Failed.", { id: toastId });
       });
   };
-
-  useEffect(() => {
-    axiosPublic
-      .get(`/user/${user?.email && user?.email}`)
-      .then(res => {
-        setUserInfo(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, [axiosPublic, user?.email]);
 
   return (
     <>

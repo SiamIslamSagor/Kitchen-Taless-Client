@@ -16,6 +16,9 @@ export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
   // state
   const [user, setUser] = useState(null);
+  const [userInfo, setUserInfo] = useState({});
+  const [reFetchUser, setReFetchUser] = useState(true);
+
   const [loading, setLoading] = useState(true);
   const axiosPublic = useAxiosPublic();
 
@@ -46,6 +49,17 @@ const AuthProvider = ({ children }) => {
         toast.error("Sign out Failed.", { id: toastId });
       });
   };
+
+  useEffect(() => {
+    axiosPublic
+      .get(`/user/${user?.email && user?.email}`)
+      .then(res => {
+        setUserInfo(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [axiosPublic, user?.email, reFetchUser]);
 
   //   auth observer to observe auth all time any where
   useEffect(() => {
@@ -86,8 +100,10 @@ const AuthProvider = ({ children }) => {
   const data = {
     // state
     user,
+    userInfo,
     loading,
     // function
+    setReFetchUser,
     googleAuth,
     logout,
     handleSignOut,
