@@ -16,7 +16,7 @@ const Recipes = () => {
   useEffect(() => {
     setRecipeLoading(true);
     axiosPublic
-      .get(`/all-recipe?limit=15`)
+      .get(`/all-recipe?limit=25`)
       .then(res => {
         setRecipes(res.data.recipes);
         setRecipeLoading(false);

@@ -59,7 +59,8 @@ const RecipeCard = ({ recipe, setReFetchRecipe }) => {
       console.log("user coins > 10");
       onOpen();
       return;
-    } else {
+    }
+    if (loggedUser.coin < 10) {
       console.log("user coins < 10");
       toast.error(
         "you don't have enough coins to view the recipe. please purchase coins."
@@ -70,6 +71,7 @@ const RecipeCard = ({ recipe, setReFetchRecipe }) => {
   };
 
   const handleRecipePurchase = async () => {
+    navigate(`/recipe-details/${recipe._id}`);
     console.log("purchase");
     const res = await axiosSecure.patch(
       `update-user/coins/${loggedUser?.email && loggedUser?.email}?amount=-10`

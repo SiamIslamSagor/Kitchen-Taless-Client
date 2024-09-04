@@ -12,7 +12,7 @@ const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddRecipes = () => {
-  const { user } = useDataContext();
+  const { user, setReFetchUser } = useDataContext();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const {
@@ -45,6 +45,7 @@ const AddRecipes = () => {
         console.log(res);
         reset();
         setRecipeImage("");
+        setReFetchUser(state => !state);
         toast.success("Recipe added successfully.", { id: toastId });
       })
       .catch(err => {
@@ -53,6 +54,7 @@ const AddRecipes = () => {
       });
 
     /////////////////////////
+    setReFetchUser(state => !state);
     toast.success("Recipe added successfully.", { id: toastId });
 
     console.log("Form submitted");
